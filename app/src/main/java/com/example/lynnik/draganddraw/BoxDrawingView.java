@@ -8,9 +8,15 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BoxDrawingView extends View {
 
   public static final String TAG = "BoxDrawingView";
+
+  private Box mCurrentBox;
+  private List<Box> mBoxen = new ArrayList<>();
 
   public BoxDrawingView(Context context) {
     super(context);
@@ -28,15 +34,23 @@ public class BoxDrawingView extends View {
     switch (event.getAction()) {
       case MotionEvent.ACTION_DOWN:
         action = "ACTION_DOWN";
+        mCurrentBox = new Box(current);
+        mBoxen.add(mCurrentBox);
         break;
       case MotionEvent.ACTION_MOVE:
         action = "ACTION_MOVE";
+        if (mCurrentBox != null) {
+          mCurrentBox.setCurrent(current);
+          invalidate();
+        }
         break;
       case MotionEvent.ACTION_UP:
         action = "ACTION_UP";
+        mCurrentBox = null;
         break;
       case MotionEvent.ACTION_CANCEL:
         action = "ACTION_CANCEL";
+        mCurrentBox = null;
         break;
     }
 
